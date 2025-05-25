@@ -19,13 +19,16 @@ We followed an iterative, phased approach aligned with Software Engineering best
 
 ### **Phase II: Business Process Modeling**
 
-* **Objective:** Visualize user-system interactions.
-* **Deliverable:** BPMN diagram (`phase2/BPMN.png`) with swimlanes for:
+* **Objective:** Visualize user-system interactions.  
+* **Deliverable:** BPMN diagram (see below) with swimlanes for:
 
-  * **User:** Registration, decision paths, account setup.
-  * **System:** Automated transactions, fraud checks, AI advisory.
-  * **Advisor:** Human review of AI insights.
+  * **User:** Registration, decision paths, account setup.  
+  * **System:** Automated transactions, fraud checks, AI advisory.  
+  * **Advisor:** Human review of AI insights.  
 * **Key Elements:** Start/End events, decision gateways, tasks, data flows.
+
+![BPMN Diagram of HerWealth Process](phase2/BPMN.png)
+
 
 ### **Phase III: Logical Data Design**
 
@@ -39,6 +42,7 @@ We followed an iterative, phased approach aligned with Software Engineering best
   5. **Transactions** (`TransactionID`, UserID, SavingsAccountID, Type, Amount)
   6. **FinancialAdvisory** (`AdviceID`, UserID, AdviceText, AdviceType)
 * **Deliverable:** ERD (`phase3/ERD.png`) with PK/FK relationships and constraints.
+![ERD Diagram](phase3/ERD.png)
 
 ### **Phases IV & V: Database Creation & Table Implementation**
 
@@ -52,7 +56,7 @@ We followed an iterative, phased approach aligned with Software Engineering best
 * **Deliverables:**
 
   * Scripts: `/phase4/db_creation.sql`, `/phase5/table_creation.sql`, `/phase5/data_insertion.sql`
-  * Screenshots: `Screenshots/DatabaseList.png`, `screenshots/table_list.png`, `screenshots/sample_data.png`
+  * Screenshots: `Screenshots/DatabaseList.png`, 
 
 ### **Phase VI: Database Interaction & Transactions**
 
@@ -63,7 +67,7 @@ We followed an iterative, phased approach aligned with Software Engineering best
   * `GetTotalSavings(userID)`: Aggregate savings balance.
   * `PrintAllUsers()`: Cursor-driven iteration with exception handler.
 * **Schema Changes:** Added `CreatedAt` timestamp to `Users` via `ALTER TABLE`.
-* **Deliverable:** `/phase6/interaction.sql`, screenshot: `screenshots/procedure_call.png`
+* **Deliverable:** `/phase6/interaction.sql`, screenshot: `screenshots/
 
 ### **Phase VII: Advanced Programming & Auditing**
 
