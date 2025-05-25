@@ -1,80 +1,101 @@
 # HerWealth Capstone Project
 
-## Introduction
-**Group Members & IDs**  
-- Mitchelle Anduru (24752)  
-- [Add any other members here]
+## 📋 Problem Statement
 
-**Problem Statement**  
-HerWealth digitizes and automates savings, micro-investments, transactions, and financial advisory services to empower women in informal sectors. The system enforces strict data-integrity, security and compliance rules via advanced database programming and auditing.
+Women in informal sectors and community savings groups face significant challenges:
+
+* **Access Barriers:** Limited access to formal banking services.
+* **Manual Processes:** Savings and investments tracked on paper or spreadsheets prone to errors.
+* **Lack of Personalization:** No real-time, tailored financial advice.
+* **Compliance Risks:** Inability to enforce transaction rules or audit data integrity.
+
+**HerWealth** addresses these gaps by providing an integrated digital platform that automates savings, enables micro-investments, offers AI-driven advisory, and enforces security policies at the database level.
 
 ---
 
-## Repository Structure
+## 🚀 Methodology & Approach
 
+We followed an iterative, phased approach aligned with Software Engineering best practices:
+
+### **Phase II: Business Process Modeling**
+
+* **Objective:** Visualize user-system interactions.
+* **Deliverable:** BPMN diagram (`phase2/BPMN.png`) with swimlanes for:
+
+  * **User:** Registration, decision paths, account setup.
+  * **System:** Automated transactions, fraud checks, AI advisory.
+  * **Advisor:** Human review of AI insights.
+* **Key Elements:** Start/End events, decision gateways, tasks, data flows.
+
+### **Phase III: Logical Data Design**
+
+* **Objective:** Define a 3NF-compliant data model.
+* **Entities & Attributes:**
+
+  1. **Users** (`UserID`, Name, Email, Phone, KYCStatus)
+  2. **SavingsAccounts** (`AccountID`, UserID, AccountType, GoalAmount, CurrentBalance)
+  3. **InvestmentPortfolios** (`PortfolioID`, Name, Category, RiskLevel, ReturnRate)
+  4. **UserInvestments** (`InvestmentID`, UserID, PortfolioID, AmountInvested)
+  5. **Transactions** (`TransactionID`, UserID, SavingsAccountID, Type, Amount)
+  6. **FinancialAdvisory** (`AdviceID`, UserID, AdviceText, AdviceType)
+* **Deliverable:** ERD (`phase3/ERD.png`) with PK/FK relationships and constraints.
+
+### **Phases IV & V: Database Creation & Table Implementation**
+
+* **Objective:** Deploy physical schema and populate data.
+* **Environment:** MySQL Workbench simulating Oracle PDB.
+* **Actions:**
+
+  * **Database:** `grpE_24752_Mitchelle_HerWealth_DB`, user `mitchelle` with full rights.
+  * **Tables:** Created six tables with appropriate data types, NOT NULL, UNIQUE, CHECK constraints.
+  * **Data Insertion:** Inserted 40+ realistic records (individual & group savings, investments, transactions, advisory).
+* **Deliverables:**
+
+  * Scripts: `/phase4/db_creation.sql`, `/phase5/table_creation.sql`, `/phase5/data_insertion.sql`
+  * Screenshots: `Screenshots/DatabaseList.png`, `screenshots/table_list.png`, `screenshots/sample_data.png`
+
+### **Phase VI: Database Interaction & Transactions**
+
+* **Objective:** Demonstrate DML, DDL, modular routines.
+* **Procedures & Functions:**
+
+  * `GetUserSavings(IN userID)`: Fetch user’s savings accounts.
+  * `GetTotalSavings(userID)`: Aggregate savings balance.
+  * `PrintAllUsers()`: Cursor-driven iteration with exception handler.
+* **Schema Changes:** Added `CreatedAt` timestamp to `Users` via `ALTER TABLE`.
+* **Deliverable:** `/phase6/interaction.sql`, screenshot: `screenshots/procedure_call.png`
+
+### **Phase VII: Advanced Programming & Auditing**
+
+* **Objective:** Enforce security/compliance rules and audit actions.
+* **Components:**
+
+  1. **Holidays Table:** Upcoming-month dates for holiday blocking.
+  2. **AuditLog Table:** Records UserID, TableName, Operation, Status, Timestamp.
+  3. **Audit Procedure:** `sp_insert_audit(...)` to insert into `AuditLog`.
+  4. **Triggers:** BEFORE INSERT/UPDATE/DELETE on all tables:
+
+     * Check `DAYOFWEEK` and `Holidays`.
+     * `DENIED` triggers raise error + log; `ALLOWED` logs success.
+* **Deliverable:** `/phase7/auditing_and_triggers.sql`, screenshots:
+
+  * `screenshots/holidays_table.png`
+  * `screenshots/audit_allowed.png`
+  * `screenshots/denied_insert_error.png`
+  * `screenshots/audit_denied.png`
+
+---
+
+## 📂 Repository Structure
+
+```
 /
-├─ README.md ← This file
-├─ phase2/ ← BPMN diagrams & scope docs
-├─ phase3/ ← ERD & logical model
-├─ phase4/ ← DB creation scripts & screenshots
-├─ phase5/ ← Table scripts & data insertion
-├─ phase6/ ← Procedures, functions, triggers
-├─ phase7/ ← Advanced triggers & auditing
-└─ screenshots/ ← Key SQL screenshots
-├─ holidays.png
-├─ auditlog_allowed.png
-├─ auditlog_denied.png
-└─ denied_insert_error.png
-
-
----
-
-## 2. Screenshots
-
-Place only the most relevant images in `screenshots/`:
-
-- **holidays.png**  
-  *Shows the `Holidays` table with upcoming-month dates.*
-
-- **auditlog_allowed.png**  
-  *A snippet of `AuditLog` with an `ALLOWED` entry.*
-
-- **denied_insert_error.png**  
-  *Workbench error dialog “DML blocked on weekdays/holidays.”*
-
-- **auditlog_denied.png**  
-  *`AuditLog` entry with `Status = DENIED` after blocked INSERT.*
-
----
-
-## 3. Key SQL Queries & Files
-
-| Phase | File                              | Description                                |
-|-------|-----------------------------------|--------------------------------------------|
-| 2     | `phase2/BPMN_HerWealth.bpmn`      | BPMN diagram XML                           |
-| 3     | `phase3/HerWealth_ERD.png`        | Entity-Relationship Diagram                |
-| 4     | `phase4/db_creation.sql`          | DB create, user grants                     |
-| 5     | `phase5/table_creation.sql`       | Table DDL + data insertion                 |
-| 6     | `phase6/interaction.sql`          | Procedures, functions, DML/DDL demos       |
-| 7     | `phase7/auditing_and_triggers.sql`| Holiday triggers + audit logging           |
-
-```sql
--- Example: Demonstrating logical relationships (Phase 5)
-SELECT u.Name, s.GoalName, t.Type, p.Name AS Portfolio
-FROM Users u
-LEFT JOIN SavingsAccounts s ON u.UserID = s.UserID
-LEFT JOIN Transactions t   ON u.UserID = t.UserID
-LEFT JOIN UserInvestments ui ON u.UserID = ui.UserID
-LEFT JOIN InvestmentPortfolios p ON ui.PortfolioID = p.PortfolioID
-WHERE u.UserID = 1;
-
-
-4. How to Run
-
-    Clone the repo
-
-    In MySQL Workbench:
-
-        Execute the sql files
-
-    Review screenshots in /screenshots to verify your environment.
+├─ README.md               # This file
+├─ phase2/                 # BPMN diagrams + docs
+├─ phase3/                 # ERD + logical model
+├─ phase4/                 # DB creation scripts
+├─ phase5/                 # Table & data scripts
+├─ phase6/                 # Interaction scripts
+├─ phase7/                 # Auditing & triggers
+└─ screenshots/            # Key screenshots
+```
